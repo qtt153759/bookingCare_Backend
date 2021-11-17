@@ -1,10 +1,12 @@
 //file web nay la router
 import  express from "express";
-import getHomePage from "../controller/homeController"
+import homeController from "../controller/homeController"
 let router=express.Router();
 let initWebRoutes=(app)=>{
-    router.get('/',getHomePage.getHomePage);
-    router.get('/about',getHomePage.getAboutPage)
+    router.get('/',homeController.getHomePage);
+    router.get('/about',homeController.getAboutPage)
+    router.get('/crud',homeController.getCRUD)
+    router.post('/post-crud',homeController.postCRUD)
     return app.use("/",router);
 }
 module.exports=initWebRoutes;

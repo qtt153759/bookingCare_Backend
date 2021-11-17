@@ -10,10 +10,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      description: {
+      image: {
         type: Sequelize.TEXT
       },
-      image: {
+      name: {
+        type: Sequelize.TEXT
+      },
+      description: {
         type: Sequelize.TEXT
       },
       createdAt: {
