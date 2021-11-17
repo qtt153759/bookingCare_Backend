@@ -1,5 +1,5 @@
 'use strict';
-
+//tao san file fake trong sql 
 module.exports = {
   up: (queryInterface, Sequelize) => {
     return queryInterface.bulkInsert('Users', [{

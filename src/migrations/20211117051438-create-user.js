@@ -1,4 +1,6 @@
 'use strict';
+//khoi tao migrate bang cau lenh nay: npx sequelize-cli db:migrate
+//sau do co theo tao du lieu fake = seeder: npx sequelize-cli seed:generate --name demo-user
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Users', {

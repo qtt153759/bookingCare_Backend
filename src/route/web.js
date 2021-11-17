@@ -1,3 +1,4 @@
+//file web nay la router
 import  express from "express";
 import getHomePage from "../controller/homeController"
 let router=express.Router();

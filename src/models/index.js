@@ -25,7 +25,7 @@ fs
     db[model.name] = model;
   });
 
-Object.keys(db).forEach(modelName => {
+Object.keys(db).forEach(modelName => {// ham foreach nen chi can import db thoi la co the truy cap het ca phan tu trong db
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }

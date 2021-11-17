@@ -1,4 +1,5 @@
 'use strict';
+// duoc khoi tao model san bang cau lenh nay :npx sequelize-cli model:generate --name User --attributes firstName:string,lastName:string,email:string
 const {
   Model
 } = require('sequelize');

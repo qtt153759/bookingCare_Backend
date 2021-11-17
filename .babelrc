@@ -1,3 +1,4 @@
+//file nay giup cai dat moi truong cho no dong bo
 {
     "presets": [
         "@babel/preset-env"

@@ -1,3 +1,5 @@
+//tao sequalize : node_modules/.bin/sequelize init
+//mac dinh trong cai sequalizerc
 const path = require('path');
 module.exports = {
   'config': path.resolve('./src/config', 'config.json'),
