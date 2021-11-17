@@ -6,7 +6,7 @@ let creatNewUser=async(data)=>{
     return new Promise(async(resolve,reject)=>{
         try{
             let hashPasswordFromBcrypt=await hashUserPassword(data.password);
-            await db.User.create({//cau lenh de creat
+            await db.User.create({//co 2 cach de tao 1 doi tuong, c1: tao new roi save, c2 : dung truc tiep ham create
                 email:data.email,
                 password:hashPasswordFromBcrypt,
                 firstName: data.firstName,
@@ -32,7 +32,19 @@ let hashUserPassword=(password)=>{
         }
     })
 }
-
+let getAllUser=()=>{
+    return new Promise(async(resolve,reject)=>{
+        try{
+            let users=await db.User.findAll({//lenh lay tat ca user
+                raw:true//raw cho do lay thong tin linh tinh
+            });
+            resolve(users)
+        }catch(e){
+            reject(e);
+        }
+    })
+}
 module.exports={
-    creatNewUser:creatNewUser
+    creatNewUser:creatNewUser,
+    getAllUser:getAllUser,
 }
