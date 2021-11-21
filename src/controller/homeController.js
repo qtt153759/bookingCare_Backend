@@ -29,17 +29,48 @@ let postCRUD=async(req,res)=>{
 }
 let displayGetCRUD=async(req,res)=>{
     let data= await CRUDservice.getAllUser(req.body);
-    console.log("--------------------------------------");
-    console.log(data);
-    console.log("----------------------------------------");
     return res.render("displayCRUD.ejs",{
         dataTable:data,                //cach tao bien trong ejs
     });
+}
+let getEditCRUD=async(req,res)=>{
+    let userId=req.query.id;//dung query de trich xuat id
+    if(userId){
+    let userData=await CRUDservice.getUserInfoById(userId);
+    return res.render("editCRUD.ejs",{
+        user:userData
+    });
+    }
+    else{
+        return res.send("id invalid")
+    }
+}
+let putCRUD=async(req,res)=>{
+    let data=req.body;//dung body de lay toan bo data
+    
+        let userData =await CRUDservice.updateUserData(data);
+        return res.render("displayCRUD.ejs",{
+            dataTable:userData
+        })
+
+}
+let deleteCRUD=async(req,res)=>{
+    let id=req.query.id;
+    if(id){
+        let userData =await CRUDservice.deleteUserById(id);
+        return res.send(`delete ${id} succeed`)
+    }else{
+        return res.send("id not found to delete");
+    }
+
 }
 module.exports={
     getHomePage:getHomePage,
     getAboutPage:getAboutPage,
     getCRUD:getCRUD,
     postCRUD:postCRUD,
-    displayGetCRUD:displayGetCRUD
+    displayGetCRUD:displayGetCRUD,
+    getEditCRUD:getEditCRUD,
+    putCRUD:putCRUD,
+    deleteCRUD:deleteCRUD,
 }
