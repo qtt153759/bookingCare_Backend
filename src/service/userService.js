@@ -54,7 +54,28 @@ let checkUserEmail=async(userEmail)=>{
         }
     })
 }
-
+let getAllUser= (userId)=>{
+    return new Promise(async(resolve,reject)=>{
+        try{
+            let users='';
+        if(userId==="All"){
+            users=await db.User.findAll({
+                attributes:{exclude:["password"]}
+            })
+        }  
+        if(userId&& userId!=="All"){
+            users=await db.User.findOne({
+                where:{id:userId},
+                attributes:{exclude:["password"]}
+            })
+        }
+        resolve(users)
+    }catch(ex){
+        reject(ex);
+    }
+    });
+}
 module.exports={//luu y jo duong exports={handleUserLogin:handleUserLogin}  vi se co lôi handleUserLogin is not function=>luc nao cung dung module.export
-    handleUserLogin:handleUserLogin
+    handleUserLogin:handleUserLogin,
+    getAllUser:getAllUser
 }
