@@ -13,6 +13,7 @@ let initWebRoutes=(app)=>{
     router.post('/put-crud',homeController.putCRUD);//
     router.get('/delete-crud',homeController.deleteCRUD);//xoa user
     router.post('/api/login',userController.handleLogin);//dang nhap
+    router.get('/api/get-all-users',userController.handleGetAllUser);//dang nhap
     return app.use("/",router);
 }
 module.exports=initWebRoutes;
