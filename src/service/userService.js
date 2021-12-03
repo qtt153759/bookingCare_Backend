@@ -86,26 +86,29 @@ let creatNewUser = (data) => {
             if (check === true) {
                 resolve({
                     errCode: 1,
-                    message:
+                    errMessage:
                         "Your email is already in used,please try another email",
                 });
+            } else {
+                let hashPasswordFromBcrypt = await hashUserPassword(
+                    data.password
+                );
+                await db.User.create({
+                    //co 2 cach de tao 1 doi tuong, c1: tao new roi save, c2 : dung truc tiep ham create
+                    email: data.email,
+                    password: hashPasswordFromBcrypt,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    address: data.address,
+                    gender: (data.gender = "1" ? true : false),
+                    phoneNumber: data.phoneNumber,
+                    roleId: data.roleId,
+                });
+                resolve({
+                    errCode: 0,
+                    message: "OK",
+                });
             }
-            let hashPasswordFromBcrypt = await hashUserPassword(data.password);
-            await db.User.create({
-                //co 2 cach de tao 1 doi tuong, c1: tao new roi save, c2 : dung truc tiep ham create
-                email: data.email,
-                password: hashPasswordFromBcrypt,
-                firstName: data.firstName,
-                lastName: data.lastName,
-                address: data.address,
-                gender: (data.gender = "1" ? true : false),
-                phoneNumber: data.phoneNumber,
-                roleId: data.roleId,
-            });
-            resolve({
-                errCode: 0,
-                message: "OK",
-            });
         } catch (e) {
             reject(e);
         }
@@ -163,7 +166,7 @@ let deleteUser = (userId) => {
             });
             resolve({
                 errCode: 0,
-                message: "The user is deleted",
+                errMessage: "The user is deleted",
             });
         } catch (err) {
             reject(err);

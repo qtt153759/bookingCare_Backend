@@ -20,7 +20,6 @@ let handleLogin = async (req, res) => {
 };
 let handleGetAllUser = async (req, res) => {
     let id = req.query.id; //all hoa id
-    console.log("abe");
     if (!id) {
         return res.status(200).json({
             errCode: 1,
