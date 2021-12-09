@@ -1,12 +1,14 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
+import { reject } from "bcrypt/promises";
+import res from "express/lib/response";
 const salt = bcrypt.genSaltSync(10);
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
         try {
             let userData = {};
-            let isExsit = await checkUserEmail(email);
-            if (isExsit) {
+            let isExist = await checkUserEmail(email);
+            if (isExist) {
                 let user = await db.User.findOne({
                     attributes: ["email", "roleId", "password"], //select
                     where: { email: email },
@@ -117,6 +119,7 @@ let creatNewUser = (data) => {
 let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
+            console.log(data);
             if (!data.id) {
                 resolve({
                     errCode: 2,
@@ -147,11 +150,11 @@ let updateUserData = (data) => {
         }
     });
 };
-let deleteUser = (userId) => {
+let deleteUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             let foundUser = await db.User.findOne({
-                where: { id: userId },
+                where: { id: data.id },
             });
             if (!foundUser) {
                 resolve({
@@ -162,7 +165,7 @@ let deleteUser = (userId) => {
             //await foundUser.destroy() cau lenh nay se gap loi destroy() is not a function vi foundUser la object ko phai instance
             //=> dung luon db.User.destroy() xuong han db lam luon cho nhanh
             await db.User.destroy({
-                where: { id: userId },
+                where: { id: data.id },
             });
             resolve({
                 errCode: 0,
@@ -183,6 +186,28 @@ let hashUserPassword = (password) => {
         }
     });
 };
+let getAllCodeService = (typeInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!typeInput) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Missing required parameters",
+                });
+            } else {
+                let res = {};
+                let allCode = await db.Allcode.findAll({
+                    where: { type: typeInput },
+                });
+                res.errCode = 0;
+                res.data = allCode;
+                resolve(res);
+            }
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
 module.exports = {
     //luu y jo duong exports={handleUserLogin:handleUserLogin}  vi se co lôi handleUserLogin is not function=>luc nao cung dung module.export
     handleUserLogin: handleUserLogin,
@@ -190,4 +215,5 @@ module.exports = {
     creatNewUser: creatNewUser,
     updateUserData: updateUserData,
     deleteUser: deleteUser,
+    getAllCodeService: getAllCodeService,
 };
