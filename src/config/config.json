@@ -1,28 +1,31 @@
 {
-  "development": {
-    "username": "root",
-    "password": null,
-    "database": "hoidanit",
-    "host": "127.0.0.1",
-    "dialect": "mysql",
-    "logging": false,
-    "query":{
-      "raw":true
+    "development": {
+        "username": "qtt153759",
+        "password": "truong157359",
+        "database": "hoidanit",
+        "host": "127.0.0.1",
+        "dialect": "mysql",
+        "logging": false,
+        "port": 3308,
+        "query": {
+            "raw": true
+        },
+        "timezone": "+07:00"
     },
-    "timezone":"+07:00"
-  },
-  "test": {
-    "username": "root",
-    "password": null,
-    "database": "database_test",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  },
-  "production": {
-    "username": "root",
-    "password": null,
-    "database": "database_production",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
-  }
+    "test": {
+        "username": "qtt153759",
+        "password": "truong157359",
+        "database": "database_test",
+        "host": "127.0.0.1",
+        "dialect": "mysql",
+        "port": 3308
+    },
+    "production": {
+        "username": "qtt153759",
+        "password": "truong157359",
+        "database": "database_production",
+        "host": "127.0.0.1",
+        "dialect": "mysql",
+        "port": 3308
+    }
 }

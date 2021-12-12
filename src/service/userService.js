@@ -1,7 +1,6 @@
 import db from "../models/index";
 import bcrypt from "bcryptjs";
-import { reject } from "bcrypt/promises";
-import res from "express/lib/response";
+
 const salt = bcrypt.genSaltSync(10);
 let handleUserLogin = (email, password) => {
     return new Promise(async (resolve, reject) => {
@@ -10,7 +9,13 @@ let handleUserLogin = (email, password) => {
             let isExist = await checkUserEmail(email);
             if (isExist) {
                 let user = await db.User.findOne({
-                    attributes: ["email", "roleId", "password"], //select
+                    attributes: [
+                        "email",
+                        "roleId",
+                        "password",
+                        "firstName",
+                        "lastName",
+                    ], //select
                     where: { email: email },
                     raw: true,
                 });
@@ -102,9 +107,10 @@ let creatNewUser = (data) => {
                     firstName: data.firstName,
                     lastName: data.lastName,
                     address: data.address,
-                    gender: (data.gender = "1" ? true : false),
+                    gender: data.gender,
                     phoneNumber: data.phoneNumber,
                     roleId: data.roleId,
+                    positionId: data.positionId,
                 });
                 resolve({
                     errCode: 0,
