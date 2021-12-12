@@ -5,6 +5,7 @@ const sequelize = new Sequelize("hoidanit", "qtt153759", "truong157359", {
     host: "localhost",
     dialect: "mysql",
     logging: false,
+    port: 3308,
 });
 
 let connectDB = async () => {
