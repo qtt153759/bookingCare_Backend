@@ -126,7 +126,8 @@ let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             console.log(data);
-            if (!data.id) {
+            //cái đk này chỉ đúng với CRUD Redux cho admin còn CRUD User sẽ luôn báo lỗi vì Modal thiếu roleId,gender,positionId
+            if (!data.id || !data.gender || !data.positionId || !data.roleId) {
                 resolve({
                     errCode: 2,
                     errMessage: "Missing required parameters",
@@ -138,8 +139,13 @@ let updateUserData = (data) => {
             });
             if (user) {
                 user.firstName = data.firstName;
+                user.email = data.email;
                 user.lastName = data.lastName;
                 user.address = data.address;
+                user.gender = data.gender;
+                user.roleId = data.roleId;
+                user.positionId = data.positionId;
+                user.phoneNumber = data.phoneNumber;
                 await user.save();
             } else {
                 resolve({
