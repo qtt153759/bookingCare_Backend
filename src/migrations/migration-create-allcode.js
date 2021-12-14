@@ -10,7 +10,8 @@ module.exports = {
                 primaryKey: true,
                 type: Sequelize.INTEGER,
             },
-            key: {
+            keyMap: {
+                //tuyệt đối không được đặt là key, vì nó trùng vs sequelize nên sẽ có lỗi
                 type: Sequelize.STRING,
             },
             type: {
