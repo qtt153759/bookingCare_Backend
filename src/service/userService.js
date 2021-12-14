@@ -111,6 +111,7 @@ let creatNewUser = (data) => {
                     phoneNumber: data.phoneNumber,
                     roleId: data.roleId,
                     positionId: data.positionId,
+                    image: data.avatar,
                 });
                 resolve({
                     errCode: 0,
@@ -125,7 +126,6 @@ let creatNewUser = (data) => {
 let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            console.log(data);
             //cái đk này chỉ đúng với CRUD Redux cho admin còn CRUD User sẽ luôn báo lỗi vì Modal thiếu roleId,gender,positionId
             if (!data.id || !data.gender || !data.positionId || !data.roleId) {
                 resolve({
@@ -146,6 +146,10 @@ let updateUserData = (data) => {
                 user.roleId = data.roleId;
                 user.positionId = data.positionId;
                 user.phoneNumber = data.phoneNumber;
+                if (data.avatar) {
+                    //không có avatar thì null=>error(nhớ là data.avatar trên frontend allow null)
+                    user.image = data.avatar;
+                }
                 await user.save();
             } else {
                 resolve({
