@@ -1,1 +1,5 @@
 npx sequelize-cli db:migrate --to [ten file migration vd:migration]
+
+Có thể addColum và changeColum bằng migration
+
+Sửa thẳng LONGBLOB vào mySQL workbench
