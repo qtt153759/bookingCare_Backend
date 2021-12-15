@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
+            //2 model mà có nhiều mối quan hệ ntn thì chúng ta buộc phải đặt tên cho nó bằng "as"
             User.belongsTo(models.Allcode, {
                 foreignKey: "positionId",
                 targetKey: "keyMap",
@@ -19,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
                 targetKey: "keyMap",
                 as: "genderData",
             });
+            User.hasOne(models.Markdown, { foreignKey: "doctorId" });
         }
     }
     User.init(
