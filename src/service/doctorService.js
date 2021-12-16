@@ -66,12 +66,22 @@ let saveDetailInforDoctor = (inputData) => {
                     errMessage: "Missing parameter",
                 });
             } else {
-                await db.Markdown.create({
+                let detailDoctor = await db.Markdown.findOne({
+                    where: { doctorId: inputData.doctorId },
+                });
+                let inputDetail = {
                     contentHTML: inputData.contentHTML,
                     contentMarkdown: inputData.contentMarkdown,
                     description: inputData.descriptiony,
                     doctorId: inputData.doctorId,
-                });
+                };
+                if (!detailDoctor) {
+                    await db.Markdown.create(inputDetail);
+                } else {
+                    await db.Markdown.update(inputData, {
+                        where: { doctorId: inputData.doctorId },
+                    });
+                }
                 resolve({
                     errCode: 0,
                     errMessage: "Save infor doctor succeed!",
@@ -96,7 +106,7 @@ let getDetailDoctorById = async (inputId) => {
                         id: inputId,
                     },
                     attributes: {
-                        exclude: ["password", "image"],
+                        exclude: ["password"],
                     },
                     include: [
                         {
@@ -113,9 +123,18 @@ let getDetailDoctorById = async (inputId) => {
                             attributes: ["valueEn", "valueVi"],
                         },
                     ], //tương đương câu lệnh join(EG loading)
-                    raw: true,
+                    raw: false, //với frontEnd thì raw thế nào cx được trừ postman,
+                    //ở đây cần raw bằng false để chuyển đổi file ảnh ở dưới(raw=true=>sequelize object,=false=>javascript object)
                     nest: true, //đóng gói object lại cho nó gọn gàng
                 });
+                //convert ảnh blob buffer sang base64 từ server
+                if (data && data.image) {
+                    data.image = new Buffer(data.image, "base64").toString(
+                        "binary"
+                    );
+                } else {
+                    data = {};
+                }
                 resolve({
                     errCode: 0,
                     data: data,
