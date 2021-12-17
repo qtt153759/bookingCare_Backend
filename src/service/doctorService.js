@@ -59,29 +59,35 @@ let saveDetailInforDoctor = (inputData) => {
             if (
                 !inputData.doctorId ||
                 !inputData.contentHTML ||
-                !inputData.contentMarkdown
+                !inputData.contentMarkdown ||
+                !inputData.action
             ) {
                 resolve({
                     errCode: 1,
                     errMessage: "Missing parameter",
                 });
             } else {
-                let detailDoctor = await db.Markdown.findOne({
-                    where: { doctorId: inputData.doctorId },
-                });
-                let inputDetail = {
-                    contentHTML: inputData.contentHTML,
-                    contentMarkdown: inputData.contentMarkdown,
-                    description: inputData.descriptiony,
-                    doctorId: inputData.doctorId,
-                };
-                if (!detailDoctor) {
-                    await db.Markdown.create(inputDetail);
-                } else {
-                    await db.Markdown.update(inputData, {
-                        where: { doctorId: inputData.doctorId },
+                if (inputData.action === "CREATE") {
+                    await db.Markdown.create({
+                        contentHTML: inputData.contentHTML,
+                        contentMarkdown: inputData.contentMarkdown,
+                        description: inputData.descriptiony,
+                        doctorId: inputData.doctorId,
                     });
+                } else if (inputData.action === "EDIT") {
+                    let doctorMarkdown = await db.Markdown.findOne({
+                        where: { doctorId: inputData.doctorId },
+                        raw: false, // cái này phải là raw bằng false thì mới đúng kiểu sequelize object thì ở dưới ms save đc
+                    });
+                    if (doctorMarkdown) {
+                        doctorMarkdown.contentHTML = inputData.contentHTML;
+                        doctorMarkdown.contentMarkdown =
+                            inputData.contentMarkdown;
+                        doctorMarkdown.description = inputData.description;
+                        await doctorMarkdown.save();
+                    }
                 }
+
                 resolve({
                     errCode: 0,
                     errMessage: "Save infor doctor succeed!",
