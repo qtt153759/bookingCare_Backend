@@ -181,18 +181,13 @@ let bulkCreateSchedule = (data) => {
                     attributes: ["timeType", "date", "doctorId", "maxNumber"],
                     raw: true, //muốn so sánh thì findAll này phải kiểu raw
                 });
-
-                //convert Date
-                if (existing && existing.length > 0) {
-                    existing = existing.map((item) => {
-                        item.date = new Date(item.date).getTime();
-                        return item;
-                    });
-                }
+                console.log("Existing ", existing);
+                console.log("Schedule ", schedule);
                 //compare different
                 let toCreate = _.differenceWith(schedule, existing, (a, b) => {
-                    return a.timeType === b.timeType && a.date === b.date;
+                    return a.timeType === b.timeType && +a.date === +b.date;
                 });
+                console.log("toCreate", toCreate);
                 if (toCreate && toCreate.length > 0) {
                     await db.Schedule.bulkCreate(toCreate);
                 }
@@ -220,6 +215,15 @@ let getScheduleByDate = (doctorId, date) => {
                         doctorId: doctorId,
                         date: date,
                     },
+                    include: [
+                        {
+                            model: db.Allcode,
+                            as: "timeTypeData",
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                    ],
+                    raw: false,
+                    nest: true,
                 });
                 //convert ảnh blob buffer sang base64 từ server
                 if (!dataSchedule) {

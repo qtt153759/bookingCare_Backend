@@ -65,9 +65,7 @@ let getScheduleByDate = async (req, res) => {
             req.query.doctorId,
             req.query.date
         );
-        return res.status(200).json({
-            infor,
-        });
+        return res.status(200).json(infor);
     } catch (e) {
         console.log(e);
         return res.status(200).json({
