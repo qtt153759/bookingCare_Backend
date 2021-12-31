@@ -64,13 +64,20 @@ let saveDetailInforDoctor = (inputData) => {
                 !inputData.doctorId ||
                 !inputData.contentHTML ||
                 !inputData.contentMarkdown ||
-                !inputData.action
+                !inputData.action ||
+                !inputData.selectedPrice ||
+                !inputData.selectedPayment ||
+                !inputData.selectedProvince ||
+                !inputData.nameClinic ||
+                !inputData.addressClinic ||
+                !inputData.note
             ) {
                 resolve({
                     errCode: 1,
                     errMessage: "Missing parameter",
                 });
             } else {
+                //update and insert to markDown
                 if (inputData.action === "CREATE") {
                     await db.Markdown.create({
                         contentHTML: inputData.contentHTML,
@@ -91,13 +98,40 @@ let saveDetailInforDoctor = (inputData) => {
                         await doctorMarkdown.save();
                     }
                 }
-
+                //update and insert to Doctor_infor table
+                let doctorInfor = await db.Doctor_Infor.findOne({
+                    where: {
+                        doctorId: inputData.doctorId,
+                    },
+                    raw: false,
+                });
+                if (doctorInfor) {
+                    doctorInfor.doctorId = inputData.doctorId;
+                    doctorInfor.priceId = inputData.selectedPrice;
+                    doctorInfor.provinceId = inputData.selectedProvince;
+                    doctorInfor.paymentId = inputData.selectedPayment;
+                    doctorInfor.nameClinic = inputData.nameClinic;
+                    doctorInfor.addressClinic = inputData.addressClinic;
+                    doctorInfor.note = inputData.note;
+                    await doctorInfor.save();
+                } else {
+                    await db.Doctor_Infor.create({
+                        doctorId: inputData.doctorId,
+                        priceId: inputData.selectedPrice,
+                        provinceId: inputData.selectedProvince,
+                        paymentId: inputData.selectedPayment,
+                        nameClinic: inputData.nameClinic,
+                        addressClinic: inputData.addressClinic,
+                        note: inputData.note,
+                    });
+                }
                 resolve({
                     errCode: 0,
                     errMessage: "Save infor doctor succeed!",
                 });
             }
         } catch (e) {
+            console.log(e);
             reject(e);
         }
     });
@@ -181,13 +215,10 @@ let bulkCreateSchedule = (data) => {
                     attributes: ["timeType", "date", "doctorId", "maxNumber"],
                     raw: true, //muốn so sánh thì findAll này phải kiểu raw
                 });
-                console.log("Existing ", existing);
-                console.log("Schedule ", schedule);
                 //compare different
                 let toCreate = _.differenceWith(schedule, existing, (a, b) => {
                     return a.timeType === b.timeType && +a.date === +b.date;
                 });
-                console.log("toCreate", toCreate);
                 if (toCreate && toCreate.length > 0) {
                     await db.Schedule.bulkCreate(toCreate);
                 }

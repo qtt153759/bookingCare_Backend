@@ -28,6 +28,9 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: "Doctor_Infor",
+            freezeTableName: true, //đây là điểm khác biệt vs các model khác vd (model user -> migration users) bảng nào cx vậy migration sẽ tự động thêm s
+            //do file migration của doctor_infor là doctor_infors không có s, nên nếu muốn dùng các lệnh truy vấn bình thường như
+            //VD: await db.Doctor_Infor.findAll({})=> thêm freezeTableName:true trong model
         }
     );
     return Doctor_Infor;
