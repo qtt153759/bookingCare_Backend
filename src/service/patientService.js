@@ -1,5 +1,5 @@
 import db from "../models/index";
-
+import emailService from "./emailService";
 require("dotenv").config();
 let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -19,6 +19,14 @@ let postBookAppointment = (data) => {
                     },
                 });
                 if (user && user[0]) {
+                    await emailService.sendSimpleEmail({
+                        reciverEmail: data.email,
+                        patientName: "Quách Khả Vy",
+                        time: "8:00 - 9:00 Chủ nhật 1/8/2021",
+                        doctorName: "Quác Thế Trường",
+                        redirectLink:
+                            "https://www.youtube.com/watch?v=0GL--Adfqhc&list=PLncHg6Kn2JT6E38Z3kit9Hnif1xC_9VqI&index=94",
+                    });
                     //hàm findOrCreate sẽ trả ra 1 mảng trong đó user[0] là data, user[1] là true/false tùy vào update hay create
                     await db.Booking.findOrCreate({
                         where: { patientId: user[0].id },
