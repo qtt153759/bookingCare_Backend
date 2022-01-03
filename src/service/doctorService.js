@@ -1,4 +1,3 @@
-import { reject } from "bcrypt/promises";
 import db from "../models/index";
 import _, { result } from "lodash";
 
