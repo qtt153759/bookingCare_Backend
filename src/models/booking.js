@@ -20,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
             patientId: DataTypes.INTEGER,
             date: DataTypes.STRING, //date mà dùng kiểu date thì lúc query lên rất là mệt => dùng String
             timeType: DataTypes.STRING,
+            token: DataTypes.STRING,
         },
         {
             sequelize,

@@ -4,7 +4,15 @@ require("dotenv").config();
 let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.email || !data.doctorId || !data.timeType || !data.date) {
+            if (
+                !data.email ||
+                !data.doctorId ||
+                !data.timeType ||
+                !data.date ||
+                !data.fullName ||
+                !data.doctorName ||
+                !data.language
+            ) {
                 resolve({
                     errCode: 1,
                     errMessage: "Missing required parameter",
@@ -21,9 +29,10 @@ let postBookAppointment = (data) => {
                 if (user && user[0]) {
                     await emailService.sendSimpleEmail({
                         reciverEmail: data.email,
-                        patientName: "Quách Khả Vy",
-                        time: "8:00 - 9:00 Chủ nhật 1/8/2021",
-                        doctorName: "Quác Thế Trường",
+                        patientName: data.fullName,
+                        time: data.timeString,
+                        doctorName: data.doctorName,
+                        language: data.language,
                         redirectLink:
                             "https://www.youtube.com/watch?v=0GL--Adfqhc&list=PLncHg6Kn2JT6E38Z3kit9Hnif1xC_9VqI&index=94",
                     });
