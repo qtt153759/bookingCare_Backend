@@ -61,6 +61,8 @@ let initWebRoutes = (app) => {
         "/api/create-new-specialty",
         specialtyController.createSpecialty
     );
+    router.get("/api/get-specialty", specialtyController.getAllSpecialty); //dang nhap
+
     return app.use("/", router);
 };
 module.exports = initWebRoutes;
