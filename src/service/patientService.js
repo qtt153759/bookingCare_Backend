@@ -16,7 +16,9 @@ let postBookAppointment = (data) => {
                 !data.date ||
                 !data.fullName ||
                 !data.doctorName ||
-                !data.language
+                !data.language ||
+                !data.address ||
+                !data.selectedGender
             ) {
                 resolve({
                     errCode: 1,
@@ -29,6 +31,9 @@ let postBookAppointment = (data) => {
                         //defaults có s
                         email: data.email,
                         roleId: "R3",
+                        gender: data.selectedGender,
+                        address: data.address,
+                        firstName: data.fullName,
                     },
                 });
                 if (user && user[0]) {
@@ -43,7 +48,11 @@ let postBookAppointment = (data) => {
                     });
                     //hàm findOrCreate sẽ trả ra 1 mảng trong đó user[0] là data, user[1] là true/false tùy vào update hay create
                     await db.Booking.findOrCreate({
-                        where: { patientId: user[0].id },
+                        where: {
+                            patientId: user[0].id,
+                            date: data.date,
+                            timeType: data.timeType,
+                        },
                         defaults: {
                             statusId: "S1",
                             doctorId: data.doctorId,

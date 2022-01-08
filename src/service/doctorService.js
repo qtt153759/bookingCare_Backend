@@ -1,5 +1,5 @@
 import db from "../models/index";
-import _, { result } from "lodash";
+import _, { reject, result } from "lodash";
 
 require("dotenv").config();
 const MAX_NUMBER_SCHEDULE = process.env.MAX_NUMBER_SCHEDULE;
@@ -439,6 +439,59 @@ let getProfileDoctorById = (inputId) => {
         }
     });
 };
+let getListPatientForDoctor = (doctorId, date) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!doctorId || !date) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Missing required parameters",
+                });
+            } else {
+                let data = await db.Booking.findAll({
+                    where: {
+                        statusId: "S2",
+                        doctorId: doctorId,
+                        date: date,
+                    },
+                    include: [
+                        {
+                            model: db.User,
+                            as: "patientData",
+                            attributes: [
+                                "email",
+                                "firstName",
+                                "address",
+                                "gender",
+                            ],
+                            include: [
+                                {
+                                    model: db.Allcode,
+                                    as: "genderData", //giống cái as khi định nghĩa associate
+                                    attributes: ["valueEn", "valueVi"],
+                                },
+                            ],
+                        },
+                        {
+                            model: db.Allcode,
+                            as: "timeTypeDataPatient", //giống cái as khi định nghĩa associate
+                            attributes: ["valueEn", "valueVi"],
+                        },
+                    ],
+                    raw: false,
+                    nest: true,
+                });
+                resolve({
+                    errCode: 0,
+                    errMessage: "Get patient success",
+                    data: data,
+                });
+            }
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
@@ -448,4 +501,5 @@ module.exports = {
     getScheduleByDate,
     getExtraInforDoctorById,
     getProfileDoctorById,
+    getListPatientForDoctor,
 };
