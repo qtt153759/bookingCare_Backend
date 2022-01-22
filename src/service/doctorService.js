@@ -216,7 +216,7 @@ let getDetailDoctorById = async (inputId) => {
                 });
                 //convert ảnh blob buffer sang base64 từ server
                 if (data && data.image) {
-                    data.image = new Buffer(data.image, "base64").toString(
+                    data.image = Buffer.from(data.image, "base64").toString(
                         "binary"
                     );
                 } else {
@@ -424,7 +424,7 @@ let getProfileDoctorById = (inputId) => {
                 });
                 //convert ảnh blob buffer sang base64 từ server
                 if (data && data.image) {
-                    data.image = new Buffer(data.image, "base64").toString(
+                    data.image = Buffer.from(data.image, "base64").toString(
                         "binary"
                     );
                 } else {
