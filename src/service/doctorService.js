@@ -254,7 +254,7 @@ let bulkCreateSchedule = (data) => {
                 let existing = await db.Schedule.findAll({
                     where: {
                         doctorId: data.doctorId,
-                        date: data.formatedDate,
+                        date: "" + data.formatedDate,
                     },
                     attributes: ["timeType", "date", "doctorId", "maxNumber"],
                     raw: true, //muốn so sánh thì findAll này phải kiểu raw
